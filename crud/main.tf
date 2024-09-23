@@ -98,22 +98,22 @@ resource "aws_security_group" "rds_sg" {
   name   = "todo-app-rds-sg"
 
   ingress {
-    from_port   = 5432  # PostgreSQL port
-    to_port     = 5432
-    protocol    = "tcp"
-    security_groups = []  # Remove reference to Lambda SG
+    from_port       = 5432 # PostgreSQL port
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [] # Remove reference to Lambda SG
     cidr_blocks = [
-      aws_subnet.public_subnet_1.cidr_block,  # Replace with your actual subnet CIDR blocks
-      aws_subnet.public_subnet_2.cidr_block,  # Replace with your actual subnet CIDR blocks
-      "0.0.0.0/0", # Allow from anywhere (you can restrict this in production)
-    ]  # Allow from Lambda function subnets
+      aws_subnet.public_subnet_1.cidr_block, # Replace with your actual subnet CIDR blocks
+      aws_subnet.public_subnet_2.cidr_block, # Replace with your actual subnet CIDR blocks
+      "0.0.0.0/0",                           # Allow from anywhere (you can restrict this in production)
+    ]                                        # Allow from Lambda function subnets
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]  # Allow outbound traffic to anywhere (you can restrict this in production)
+    cidr_blocks = ["0.0.0.0/0"] # Allow outbound traffic to anywhere (you can restrict this in production)
   }
 
   tags = {
@@ -125,11 +125,11 @@ resource "aws_security_group" "rds_sg" {
 
 # PostgreSQL RDS instance
 resource "aws_db_instance" "todo_app_db" {
-  allocated_storage    = 20
+  allocated_storage   = 20
   storage_type        = "gp2"
   engine              = "postgres"
-  engine_version      = "16.4"  # Use a compatible version
-  instance_class      = var.db_instance_class  # Keep your existing instance class variable
+  engine_version      = "16.4"                # Use a compatible version
+  instance_class      = var.db_instance_class # Keep your existing instance class variable
   db_name             = var.db_name
   username            = var.db_username
   password            = var.db_password
@@ -151,14 +151,14 @@ resource "aws_db_instance" "todo_app_db" {
 # Custom RDS Parameter Group to disable SSL
 resource "aws_db_parameter_group" "todo_app_pg_no_ssl" {
   name   = "todo-app-pg-no-ssl"
-  family = "postgres16"  # Ensure this is the correct version for your PostgreSQL RDS instance
+  family = "postgres16" # Ensure this is the correct version for your PostgreSQL RDS instance
 
   description = "Parameter group to disable SSL for PostgreSQL RDS"
 
   # Disable SSL by setting rds.force_ssl to 0
   parameter {
-    name  = "rds.force_ssl"
-    value = "0"
+    name         = "rds.force_ssl"
+    value        = "0"
     apply_method = "immediate"
   }
 
