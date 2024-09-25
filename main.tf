@@ -113,7 +113,7 @@ resource "aws_db_instance" "todo_app_db" {
   db_subnet_group_name       = aws_db_subnet_group.rds_subnet_group.name
   vpc_security_group_ids     = [aws_security_group.rds_sg.id]
   publicly_accessible        = true  # Set to true to allow public access
-  skip_final_snapshot        = false
+  skip_final_snapshot        = true
   backup_retention_period    = var.backup_retention_period
   storage_encrypted          = true
   auto_minor_version_upgrade = true
